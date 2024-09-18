@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sound Mapping Prototype</title>
+    <!-- Include CSS for styling -->
+    <style>
+        body {
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+        }
+        input[type="file"], input[type="number"], button {
+            font-size: 18px;
+            padding: 10px;
+            margin: 5px;
+            width: 90%;
+            max-width: 400px;
+        }
+        label {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Controls Container -->
+    <div id="controls">
+        <!-- File Input -->
+        <input type="file" id="fileInput" accept="audio/*" capture><br>
+        <!-- Fade-In Time Input -->
+        <label for="fadeInTime">Fade-In Time (ms):</label>
+        <input type="number" id="fadeInTime" placeholder="Fade-in time in ms" value="1000"><br>
+        <!-- Fade-Out Time Input -->
+        <label for="fadeOutTime">Fade-Out Time (ms):</label>
+        <input type="number" id="fadeOutTime" placeholder="Fade-out time in ms" value="1000"><br>
+        <!-- Play and Stop Buttons -->
+        <button id="playButton">Play</button>
+        <button id="stopButton">Stop</button>
+    </div>
+
+    <!-- Include p5.js for the sketch -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+    <!-- Include Tone.js -->
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.8.41/build/Tone.min.js"></script>
+    <!-- Main script -->
+    <script src="main.js"></script>
+</body>
+</html>
