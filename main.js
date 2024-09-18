@@ -108,7 +108,6 @@ function showError(error) {
     background(220);
     text(errorMessage, 10, height / 2);
 }
-
 // Start the audio context on the first user interaction
 async function userInteracted() {
     if (!audioContextStarted) {
@@ -117,6 +116,7 @@ async function userInteracted() {
         console.log('Audio context started');
     }
 }
+
 // Handle file upload
 function handleFileUpload(event) {
     const file = event.target.files[0];
