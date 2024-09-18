@@ -108,6 +108,7 @@ function showError(error) {
     background(220);
     text(errorMessage, 10, height / 2);
 }
+
 // Start the audio context on the first user interaction
 async function userInteracted() {
     if (!audioContextStarted) {
@@ -161,3 +162,4 @@ function stopPlaying() {
         console.log('Sound file is not playing.');
     }
 }
+
