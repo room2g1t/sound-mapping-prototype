@@ -1,13 +1,14 @@
 // Variables to store the current GPS coordinates
 let latitude, longitude;
-let isPlaying = false;        // Control play/stop state
-let fadeInTime = 1000;        // Default fade-in time in milliseconds
-let fadeOutTime = 1000;       // Default fade-out time in milliseconds
-let player;                   // Tone.Player instance
+let isPlaying = false;   // Control play/stop state
+let fadeInTime = 1000;   // Default fade-in time in milliseconds
+let fadeOutTime = 1000;  // Default fade-out time in milliseconds
+let player;              // Tone.Player instance
 let audioContextStarted = false; // Flag to check if audio context is started
 
 function setup() {
-    createCanvas(400, 400);
+    // Adjust canvas size for mobile devices
+    createCanvas(windowWidth, windowHeight);
     textSize(16);
     fill(0);
 
@@ -15,17 +16,24 @@ function setup() {
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(updatePosition, showError);
     } else {
+        background(220);
         text('Geolocation is not supported by your browser.', 10, 20);
     }
 
     // File input handling
     const fileInput = document.getElementById('fileInput');
-    fileInput.addEventListener('change', handleFileUpload);
+    fileInput.addEventListener('change', (event) => {
+        userInteracted();
+        handleFileUpload(event);
+    });
 
     // Play/Stop button handling
     const playButton = document.getElementById('playButton');
     const stopButton = document.getElementById('stopButton');
-    playButton.addEventListener('click', startPlaying);
+    playButton.addEventListener('click', () => {
+        userInteracted();
+        startPlaying();
+    });
     stopButton.addEventListener('click', stopPlaying);
 
     // Fade-in time input handling
@@ -47,6 +55,10 @@ function setup() {
             console.log(`Fade-out time set to ${fadeOutTime} ms`);
         }
     });
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
@@ -76,22 +88,35 @@ function updatePosition(position) {
 
 // Error handling function
 function showError(error) {
+    let errorMessage;
     switch (error.code) {
         case error.PERMISSION_DENIED:
-            text('User denied the request for Geolocation.', 10, 20);
+            errorMessage = 'User denied the request for Geolocation.';
             break;
         case error.POSITION_UNAVAILABLE:
-            text('Location information is unavailable.', 10, 20);
+            errorMessage = 'Location information is unavailable.';
             break;
         case error.TIMEOUT:
-            text('The request to get user location timed out.', 10, 20);
+            errorMessage = 'The request to get user location timed out.';
             break;
         case error.UNKNOWN_ERROR:
-            text('An unknown error occurred.', 10, 20);
+            errorMessage = 'An unknown error occurred.';
             break;
     }
+    console.log(errorMessage);
+    // Display the error message on the canvas
+    background(220);
+    text(errorMessage, 10, height / 2);
 }
 
+// Start the audio context on the first user interaction
+async function userInteracted() {
+    if (!audioContextStarted) {
+        await Tone.start();
+        audioContextStarted = true;
+        console.log('Audio context started');
+    }
+}
 // Handle file upload
 function handleFileUpload(event) {
     const file = event.target.files[0];
@@ -111,13 +136,7 @@ function handleFileUpload(event) {
 }
 
 // Start playing (update status)
-async function startPlaying() {
-    if (!audioContextStarted) {
-        // Start the audio context
-        await Tone.start();
-        audioContextStarted = true;
-        console.log('Audio context started');
-    }
+function startPlaying() {
     if (player) {
         isPlaying = true;
         console.log(`Playing with fade-in time of ${fadeInTime} ms`);
